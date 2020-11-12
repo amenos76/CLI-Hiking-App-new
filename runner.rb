@@ -1,8 +1,10 @@
 require_relative 'config/environment'
 
-# binding.pry
+system "clear"
 
 app = Cli.new
+
+# binding.pry
 
 app.start
 app.main_menu
