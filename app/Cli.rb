@@ -66,6 +66,15 @@ class Cli
         end
     end
 
+
+    # return to main menu message and action
+    def main_menu_return
+        puts "Returning to main menu..."
+        sleep(1)
+        main_menu
+    end
+
+
     #display main menu
     def main_menu
         system "clear"
@@ -122,6 +131,7 @@ class Cli
                 ask_difficulty
                 ask_location
                 ask_dog
+                ask_water
                 puts "Calculating your PERFECT hike..."
                 sleep(1)
                 puts "Your pefect hike is:"
@@ -134,7 +144,7 @@ class Cli
                         puts "Let's find something else!"
                         sleep (1)
                     end
-                main_menu_return
+                   main_menu_return
             when "See your saved hikes"
                 puts "Coming soon.."
                 main_menu_return
@@ -188,10 +198,12 @@ class Cli
         system "clear"
         @dog_choice = prompt.yes?("Any doggos that you'd like to bring along?")
         if (@dog_choice)
-            puts "*tail wagging intensifies*"
+            puts "🐶 *tail wagging intensifies* 🐶"
+            sleep(1)
             puts "You chose yes, saving to your preferences.."
         else
             puts "Maybe next time!"
+            sleep(1)
             puts "You chose no, saving to your preferences.."
         end
         sleep(1)
@@ -199,17 +211,26 @@ class Cli
 
     #asks user if they'd like a trail with water
     def ask_water
+        system "clear"
         @water_choice = prompt.yes?("How about some lovely water features?")
         if (@water_choice)
-            puts "Splish splash"
+            puts "🌊 That's some high quality H20 🌊"
         else
+            puts "No water today"
         end
+        sleep(1)
     end
 
     # finds trail object
     def perfect_trail
-        perfect_trail = Trail.filter_by_user_preferences(@location_choice, @difficulty_choice, @dog_choice)
+        perfect_trail = Trail.filter_by_user_preferences(@location_choice, @difficulty_choice, @dog_choice, @water_choice)
+        if perfect_trail = []
+            puts "Couldn't find a matching trail, you're a picky one!"
+            re
+            sleep(1)
+        else
         ap perfect_trail
+        end
     end
 
     # def display_trail_info(trail_name)
