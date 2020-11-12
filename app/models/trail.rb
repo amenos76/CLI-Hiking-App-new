@@ -25,4 +25,15 @@ class Trail < ActiveRecord::Base
         all.where(location: location_choice, difficulty: difficulty_choice, pets_allowed: pet_choice, has_water: water_choice)
     end
 
+    def self.trails_less_than_input_time(input_time)
+        all.where('length_time <= ?', input_time) 
+    end
+
+    def self.get_trail_info trail_name
+        all.find do |trail|
+            trail_name == trail.name
+        end
+    end
+
+
 end
