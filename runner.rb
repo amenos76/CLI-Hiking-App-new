@@ -1,11 +1,13 @@
 require_relative 'config/environment'
 
-# binding.pry
+system "clear"
 
 app = Cli.new
 
+# binding.pry
+
 app.start
-# app.main_menu
+app.main_menu
 # app.ask_difficulty
 # app.ask_location
 # app.ask_dog
@@ -20,7 +22,7 @@ app.start
 
 
 
-app.display_each_trail_name
+# app.display_each_trail_name
 
 
 
