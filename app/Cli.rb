@@ -59,24 +59,20 @@ class Cli
         menu_selection = prompt.select("Please choose an option:", menu_options)   
 
         # loop do
-        #     case menu_selection
-        #     when "Show me some hikes"
-        #         display_each_trail_name
-        #     when "Choose a random trial for me"
-        #         puts "Feature not ready yet."
-        #     end
-        #     when "Hike compatibility quiz"
-        #         puts "Feature not ready yet."
-        #     end
-        #     when "See your saved hikes"
-        #         puts "Feature not ready yet"
-        #     end
-        #     when "Exit Program"
-        #         puts "Goodbye!"
-        #     else
-        #         puts "else statement hit"
-        #     end
-        # end
+            case menu_selection
+            when "Show me some hikes"
+                display_each_trail_name
+            when "Choose a random trail for me"
+                puts "Feature not ready yet."
+            when "Hike compatibility quiz"
+                puts "Feature not ready yet."
+            when "See your saved hikes"
+                puts "Feature not ready yet"
+            when "Exit Program"
+                puts "Goodbye!"
+            else
+                puts "else statement hit"
+            end
     end
             
 
