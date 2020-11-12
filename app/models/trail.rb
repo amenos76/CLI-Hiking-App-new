@@ -21,8 +21,8 @@ class Trail < ActiveRecord::Base
         all.where(location: input_location)
     end
     
-    def self.filter_by_user_preferences(input_location, input_difficulty, input_has_pet)
-        all.where(location: input_location, difficulty: input_difficulty, pets_allowed: input_has_pet)
+    def self.filter_by_user_preferences(location_choice, difficulty_choice, pet_choice, water_choice)
+        all.where(location: location_choice, difficulty: difficulty_choice, pets_allowed: pet_choice, has_water: water_choice)
     end
 
 end
