@@ -47,19 +47,19 @@ ruby runner.rb
 * Have the app return a random hike for you.
      
 
-     ![random hike gif](Media/randomhike.gif)
+     ![random hike gif](app/media/randomhike.gif)
 
 
 * See the listed hike details for each.
 * Save your favorite hikes for the future, and remove any you wish to no    
   longer save.
     
-    ![favorite hike gif](Media/favoritehikes.gif)
+    ![favorite hike gif](app/media/favoritehikes.gif)
 
 * Looking for the best hike for you? Use the Find your perfect hike feature! 
       
 
-    ![perfect hike gif](Media/perfecthike.gif)
+    ![perfect hike gif](app/media/perfecthike.gif)
 
 
 ## Code Examples
