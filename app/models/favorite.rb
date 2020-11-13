@@ -31,6 +31,8 @@ class Favorite < ActiveRecord::Base
         else
             system "clear"
             puts "You already have this trail saved!"
+            sleep(0.5)
+            puts "Returning to main menu"
             sleep(2.5)
             system "clear"
         end

@@ -79,15 +79,24 @@ class Cli
         banner
         user_input = prompt.ask "Please enter your username.."
         found_user = User.find_by(username: user_input)
-        @@user_name_selection = found_user.username
+        
         # binding.pry
         if found_user
+            @@user_name_selection = found_user.username
             self.user = found_user
             puts "Welcome back #{user.first_name} #{user.last_name}!"
             sleep(1)
         else
             user_input = prompt.ask "Username does not exist. Please enter your email.."
+            email = User.find_by_email(user_input)
+            if email.nil?
+                puts "Email not found, please sign up first"
+                sleep(1.5)
+                sign_up
+            else
             self.user = User.find_by_email(user_input)
+            puts "Welcome back #{user.first_name} #{user.last_name}!"
+            end
         end
     end
 
@@ -104,14 +113,12 @@ class Cli
     def main_menu
         system "clear"
         banner
-        menu_options = ["Find hikes based how long I have (time)", "Select trail by name", "Choose a random trail for me", "Hike compatibility quiz", "See your saved hikes", "Exit Program"]
+        menu_options = ["Find hikes based on how long I have (time)", "Select trail by name", "Choose a random trail for me", "Hike compatibility quiz", "See your saved hikes", "Exit Program"]
         menu_selection = prompt.select("Please choose an option:", menu_options)   
 
         # loop do
             case menu_selection
-            when "Find hikes based how long I have (time)"
-                
-                
+            when "Find hikes based on how long I have (time)"
                 number_selection = prompt.select("How much time (in hours) do you have to hike today?", %w(1 2 3 5 10))
                 matching_trails = Trail.trails_less_than_input_time(number_selection)
                 ap matching_trails
@@ -123,41 +130,17 @@ class Cli
                 trail_info = Trail.find_by_name(name_choice)
                 puts name_choice
                 save_trail_response = prompt.yes?("Would you like to save this trail to your favorites?")
-                if (save_trail_response)
-                    
-                    trail_id = (Trail.find_by_name(name_choice)).id
-                    
-                    user_id = (User.get_user_object(@@user_name_selection)).id
-                    # binding.pry
-                    Favorite.create_new_favorite(trail_id, user_id)
-                    puts "Saving to favorites..."
-                    sleep(1)
-                    main_menu_return
-                else
-                    main_menu_return
-                end
+                    if (save_trail_response)
+                        save_to_favorites(name_choice)
+                    else
+                        main_menu_return
+                    end
             when "Choose a random trail for me"
                 random_trail_name = Trail.all_trail_names.sample
+                sleep(1)
                 puts "Here's a random trail selection: " + random_trail_name
                 sleep(1)
-                user_input = prompt.yes?("Would you like to find out more about this hike?")
-                if (user_input)
-                    system "clear"
-                    puts "Here is some information about #{random_trail_name}:"
-                    trail_name_to_string = random_trail_name.to_s
-                    trail_info = Trail.find_by_name(trail_name_to_string)
-                    ap trail_info
-                    user_input2 = prompt.yes?("Would you like to save this trail to your favorites?")
-                        if (user_input2)
-                            puts "Saving to favorites..."
-                            sleep(1)
-                            main_menu_return
-                        else
-                            main_menu_return
-                        end
-                else
-                    main_menu_return
-                end
+                more_info(random_trail_name)
             when "Hike compatibility quiz"
                 system "clear"
                 puts "Let's find the perfect hike for you!"
@@ -274,10 +257,49 @@ class Cli
         end
     end
 
-    # def display_trail_info(trail_name)
-    #     Trail.get_trail_info(trail_name).each do |trail|
-    #         puts "Name:  #{trail.name}"
-    #         
-    #     end 
-    # end
+    # saves trail name to favorites
+    def save_to_favorites(trail_name)
+        trail_id = (Trail.find_by_name(trail_name)).id
+        user_id = (User.get_user_object(@@user_name_selection)).id
+
+        Favorite.create_new_favorite(trail_id, user_id)
+        banner
+        puts "Saving to favorites..."
+        sleep(1)
+        main_menu_return
+
+    end
+
+    # returns object of trail
+    def more_info(trail_name)
+        user_input = prompt.yes?("Would you like to find out more about this hike?")
+                if (user_input)
+                    system "clear"
+                    banner
+                    puts "Here is some information about #{trail_name}:"
+                    trail_name_to_string = trail_name.to_s
+                    trail_info = Trail.find_by_name(trail_name_to_string)
+                    ap trail_info
+                    user_input2 = prompt.yes?("Would you like to save this trail to your favorites?")
+                        if (user_input2)
+                            save_to_favorites(trail_name)
+                            main_menu_return
+                        else
+                            main_menu_return
+                        end
+                else
+                    main_menu_return
+                end
+    end
+
+    #saves trail name to favorites
+    def save_to_favorites(trail_name)
+        trail_id = (Trail.find_by_name(trail_name)).id
+        user_id = (User.get_user_object(@@user_name_selection)).id
+        Favorite.create_new_favorite(trail_id, user_id)
+        banner
+        sleep(1)
+        main_menu_return
+    end
+    
 end
