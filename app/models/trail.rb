@@ -1,4 +1,6 @@
 class Trail < ActiveRecord::Base
+    has_many :favorites
+    has_many :users, through: :meals
 
 
     # array of all trail names
@@ -34,6 +36,21 @@ class Trail < ActiveRecord::Base
             trail_name == trail.name
         end
     end
+
+    def get_trail_info trail_name
+        Trail.all.find do |trail|
+            trail_name == trail.name
+        end
+    end
+
+    def self.get_trail_id trail_name
+       Trail.find_by(name: trail_name).id
+    end
+    
+    def self.get_trail_by_id trail_id
+        Trail.find_by(id: trail_id)
+    end
+
 
 
 end
