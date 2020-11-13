@@ -4,6 +4,7 @@ class Cli
 
     def initialize user=nil
         @user = user
+        @found_user_id = ""
         @trail_choice = ""
         @difficulty_choice = ""
         @location_choice = ""
@@ -11,9 +12,28 @@ class Cli
         @water_choice = nil
     end
 
+  # This method will iterate over each line individually from the .txt file and print it to the console
+    def banner
+        banner = """
+         /$$                   /$$   /$$             /$$   /$$ /$$ /$$                
+        | $$                  | $$  | $/            | $$  | $$|__/| $$                
+        | $$        /$$$$$$  /$$$$$$|_//$$$$$$$     | $$  | $$ /$$| $$   /$$  /$$$$$$ 
+        | $$       /$$__  $$|_  $$_/  /$$_____/     | $$$$$$$$| $$| $$  /$$/ /$$__  $$
+        | $$      | $$$$$$$$  | $$   |  $$$$$$      | $$__  $$| $$| $$$$$$/ | $$$$$$$$
+        | $$      | $$_____/  | $$ /$$\____  $$      | $$  | $$| $$| $$_  $$ | $$_____/
+        | $$$$$$$$|  $$$$$$$  |  $$$$//$$$$$$$/     | $$  | $$| $$| $$ \  $$|  $$$$$$$
+        |________/ \_______/   \___/ |_______/        |__/  |__/|__/|__/  \__/ \_______/
+        """
+        puts banner
+    end
+
     def prompt
         TTY::Prompt.new(symbols: {marker: '⛰'})
     end
+
+    @@user_name_selection = ""
+    @@trail_name_selection = ""
+
 
     #welcomes user, allows user to sign up or sign in if they signed up previously
     def start
@@ -35,6 +55,8 @@ class Cli
     end
     
     def sign_up
+        system "clear"
+        banner
         first_name = prompt.ask "What is your first name?"
         last_name = prompt.ask "What is your last name?"
         username = prompt.ask "What is your username?"
@@ -54,8 +76,10 @@ class Cli
 
     def sign_in
         system "clear"
+        banner
         user_input = prompt.ask "Please enter your username.."
         found_user = User.find_by(username: user_input)
+        @@user_name_selection = found_user
         if found_user
             self.user = found_user
             puts "Welcome back #{user.first_name} #{user.last_name}!"
@@ -78,12 +102,15 @@ class Cli
     #display main menu
     def main_menu
         system "clear"
+        banner
         menu_options = ["Find hikes based how long I have (time)", "Select trail by name", "Choose a random trail for me", "Hike compatibility quiz", "See your saved hikes", "Exit Program"]
         menu_selection = prompt.select("Please choose an option:", menu_options)   
 
         # loop do
             case menu_selection
             when "Find hikes based how long I have (time)"
+                
+                
                 number_selection = prompt.select("How much time (in hours) do you have to hike today?", %w(1 2 3 5 10))
                 matching_trails = Trail.trails_less_than_input_time(number_selection)
                 ap matching_trails
@@ -93,9 +120,16 @@ class Cli
                 trail_names_array = Trail.all_trail_names
                 name_choice = prompt.select("Please select a trail:", trail_names_array)
                 trail_info = Trail.find_by_name(name_choice)
-                puts trail_info.name
-                user_input3 = prompt.yes?("Would you like to save this trail to your favorites?")
-                if (user_input3)
+                puts name_choice
+                binding.pry
+                save_trail_response = prompt.yes?("Would you like to save this trail to your favorites?")
+                if (save_trail_response)
+                    
+                    trail_id = Trail.get_trail_id(name_choice)
+                    
+                    user_id = @@user_name_selection.id
+                    
+                    Favorite.create_new_favorite(trail_id, user_id)
                     puts "Saving to favorites..."
                     sleep(1)
                     main_menu_return
@@ -136,15 +170,7 @@ class Cli
                 sleep(1)
                 puts "Your pefect hike is:"
                 perfect_trail
-                answer = prompt.yes?("Would you like to save this hike to your favorites?")
-                    if answer
-                        puts "Saving to your favorites.."
-                        sleep(1)
-                    else
-                        puts "Let's find something else!"
-                        sleep (1)
-                    end
-                   main_menu_return
+                main_menu_return
             when "See your saved hikes"
                 puts "Coming soon.."
                 main_menu_return
@@ -226,17 +252,24 @@ class Cli
         perfect_trail = Trail.filter_by_user_preferences(@location_choice, @difficulty_choice, @dog_choice, @water_choice)
         if perfect_trail = []
             puts "Couldn't find a matching trail, you're a picky one!"
-            re
             sleep(1)
         else
         ap perfect_trail
+        answer = prompt.yes?("Would you like to save this hike to your favorites?")
+                    if answer
+                        puts "Saving to your favorites.."
+                        sleep(1)
+                    else
+                        puts "Let's find something else!"
+                        sleep (1)
+                    end
         end
     end
 
     # def display_trail_info(trail_name)
     #     Trail.get_trail_info(trail_name).each do |trail|
-    #         puts "Name: " trail.name
-    #         puts "Location: " trail.location
+    #         puts "Name:  #{trail.name}"
+    #         
     #     end 
     # end
 end

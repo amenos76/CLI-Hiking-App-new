@@ -6,6 +6,7 @@ app = Cli.new
 
 # binding.pry
 
+app.banner
 app.start
 app.main_menu
 # app.ask_difficulty
