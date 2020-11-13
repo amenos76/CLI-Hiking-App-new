@@ -125,11 +125,11 @@ class Cli
                 save_trail_response = prompt.yes?("Would you like to save this trail to your favorites?")
                 if (save_trail_response)
                     
-                    # trail_id = Trail.get_trail_id(name_choice)
+                    trail_id = (Trail.find_by_name(name_choice)).id
                     
-                    # user_id = @@user_name_selection.id
-                    
-                    # Favorite.create_new_favorite(trail_id, user_id)
+                    user_id = (User.get_user_object(@@user_name_selection)).id
+                    # binding.pry
+                    Favorite.create_new_favorite(trail_id, user_id)
                     puts "Saving to favorites..."
                     sleep(1)
                     main_menu_return

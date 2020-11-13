@@ -43,30 +43,14 @@ class Trail < ActiveRecord::Base
         end
     end
 
-    # def self.get_trail_id(trail_name)
-    #     trail_object = trail_name.get_trail_info
-    #     trail_object.id
-    # end
-
     def self.get_trail_id trail_name
        Trail.find_by(name: trail_name).id
-       
-       
-        # trail_object = all.find do |trail|
-        #     trail_name == trail.name
-        # end
-        # trail_object.id
     end
     
     def self.get_trail_by_id trail_id
         Trail.find_by(id: trail_id)
     end
 
-
-    # def object_to_s
-    #     pp "Name: #{self.name}," "Location: #{self.location}", "Description: #{self.description}"
-        
-    # end
 
 
 end

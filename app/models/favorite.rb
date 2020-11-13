@@ -18,12 +18,14 @@ class Favorite < ActiveRecord::Base
     # end
 
     def self.create_new_favorite(trail_id, user_id)
-        returned_favorite = Trail.find_by(trail_id: trail_id, user_id: user_id)
+        returned_favorite = Favorite.find_by(trail_id: trail_id, user_id: user_id)
         if returned_favorite.nil?
+            # binding.pry
             Favorite.create(trail_id: trail_id, user_id: user_id)
             puts "Great choice!"
             sleep(1.25)
             puts "Your trail has been saved!"
+            # binding.pry
             sleep(1.25)
             system "clear"
         else

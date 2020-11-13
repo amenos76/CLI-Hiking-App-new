@@ -23,5 +23,10 @@ class User < ActiveRecord::Base
         User.find_by(username: user_name).id
     end
 
+    # returns user object
+    def self.get_user_object(user_name)
+        User.find_by(username: user_name)
+    end
+
 
 end
