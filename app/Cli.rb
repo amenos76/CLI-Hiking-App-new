@@ -12,7 +12,7 @@ class Cli
         @water_choice = nil
     end
 
-  # This method will iterate over each line individually from the .txt file and print it to the console
+  # This method displays the banner
     def banner
         banner = """
          /$$                   /$$   /$$             /$$   /$$ /$$ /$$                
@@ -79,7 +79,8 @@ class Cli
         banner
         user_input = prompt.ask "Please enter your username.."
         found_user = User.find_by(username: user_input)
-        @@user_name_selection = found_user
+        @@user_name_selection = found_user.username
+        # binding.pry
         if found_user
             self.user = found_user
             puts "Welcome back #{user.first_name} #{user.last_name}!"
@@ -114,22 +115,21 @@ class Cli
                 number_selection = prompt.select("How much time (in hours) do you have to hike today?", %w(1 2 3 5 10))
                 matching_trails = Trail.trails_less_than_input_time(number_selection)
                 ap matching_trails
-                prompt.yes?("Would you like more info on one of theses trails?")
+                prompt.select("Return to main menu?", %w(Yes))
                 main_menu_return
             when "Select trail by name"
                 trail_names_array = Trail.all_trail_names
                 name_choice = prompt.select("Please select a trail:", trail_names_array)
                 trail_info = Trail.find_by_name(name_choice)
                 puts name_choice
-                binding.pry
                 save_trail_response = prompt.yes?("Would you like to save this trail to your favorites?")
                 if (save_trail_response)
                     
-                    trail_id = Trail.get_trail_id(name_choice)
+                    # trail_id = Trail.get_trail_id(name_choice)
                     
-                    user_id = @@user_name_selection.id
+                    # user_id = @@user_name_selection.id
                     
-                    Favorite.create_new_favorite(trail_id, user_id)
+                    # Favorite.create_new_favorite(trail_id, user_id)
                     puts "Saving to favorites..."
                     sleep(1)
                     main_menu_return
@@ -148,13 +148,13 @@ class Cli
                     trail_info = Trail.find_by_name(trail_name_to_string)
                     ap trail_info
                     user_input2 = prompt.yes?("Would you like to save this trail to your favorites?")
-                    if (user_input2)
-                        puts "Saving to favorites..."
-                        sleep(1)
-                        main_menu_return
-                    else
-                        main_menu_return
-                    end
+                        if (user_input2)
+                            puts "Saving to favorites..."
+                            sleep(1)
+                            main_menu_return
+                        else
+                            main_menu_return
+                        end
                 else
                     main_menu_return
                 end
@@ -172,11 +172,19 @@ class Cli
                 perfect_trail
                 main_menu_return
             when "See your saved hikes"
-                puts "Coming soon.."
+                # binding.pry
+                favorite_trail_names = Favorite.get_user_favorites(@@user_name_selection)
+                sleep(1)
+                system "clear"
+                banner
+                trail_choice = prompt.select("Choose a trail to view more info", favorite_trail_names)
+                ap Trail.find_by_name(trail_choice)
+                sleep(1)
+                prompt.select("Return to main menu", %w(Main\ Menu))
                 main_menu_return
             when "Exit Program"
-                puts "Goodbye!"
-                sleep(2)
+                puts "Happy trails!"
+                sleep(3)
                 abort
             else
                 puts "else statement hit"
@@ -210,7 +218,7 @@ class Cli
         # end
     end
 
-    #asks user preferred hike location (can choose multiple)
+    #asks user preferred hike location
     def ask_location
         system "clear"
         choices = Trail.all_trail_locations
@@ -250,7 +258,7 @@ class Cli
     # finds trail object
     def perfect_trail
         perfect_trail = Trail.filter_by_user_preferences(@location_choice, @difficulty_choice, @dog_choice, @water_choice)
-        if perfect_trail = []
+        if perfect_trail == []
             puts "Couldn't find a matching trail, you're a picky one!"
             sleep(1)
         else
