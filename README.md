@@ -14,7 +14,7 @@
 
 ## General info
 Let's Hike is a CLI application that allows users to create a login and search a database full of fun hikes for every level of Hiker! Let's Hike gives you several ways to find the right hike. You can search specifically by the amount of time you're looking to hike, 
-or simply allow the app to pick a random hike for you. To find the perfect hike tailored to you, try out our Hike compatibility quiz! All of the hikes can be saved in your 'favorites' to easily reference in the future.
+or simply allow the app to pick a random hike for you. If you are looking for the best hike that fits your needs, try out our Find your perfect hike feature! All of the hikes can be saved in your 'favorites' to easily reference in the future.
 
 
 ## Intro Video
@@ -27,6 +27,10 @@ video link here.
 * Sinatra - version 2.0
 * Sinatra- ActiveRecord - version 2.0
 * SQLite3 - version 1.4
+* TTY prompt 0.22.0
+* TTY box 0.6.0
+* Awesome Print 1.8.0
+
 
 
 ## Setup
@@ -42,11 +46,12 @@ ruby runner.rb
      -random hike feature gif here-
 
 * See the listed hike details for each.
-* Save your favorite hikes for the future.
+* Save your favorite hikes for the future, and remove any you wish to no    
+  longer save.
     
     -favorites feature gif here-
 
-* Use the Hike compatibility quiz to find the perfect hike!
+* Looking for the best hike for you? Use the Find your perfect hike feature! 
       
     -quiz gif here-
 
