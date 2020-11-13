@@ -36,6 +36,9 @@ video link here.
 ## Setup
 To run the app, install it locally by cloning the GitHub repository, and in your Terminal type:
 ```ruby
+bundle.install
+```
+```ruby
 ruby runner.rb
 ``` 
 
@@ -43,27 +46,23 @@ ruby runner.rb
 * Browse hikes based on length of time.
 * Have the app return a random hike for you.
      
-     -random hike feature gif here-
+     ![](randomhike.gif)
 
 * See the listed hike details for each.
 * Save your favorite hikes for the future, and remove any you wish to no    
   longer save.
     
-    -favorites feature gif here-
+    ![](favoritehikes.gif)
 
 * Looking for the best hike for you? Use the Find your perfect hike feature! 
       
-    -quiz gif here-
-
+    ![](perfecthike.gif)
 
 ## Code Examples
 ``` ruby
-def display_each_trail_name
-    puts 'Here is our list of Colorado hiking trails:'
-    Trail.all_trail_names.each do |trail_name|
-    puts trail_name
-  end
-end 
+def self.filter_by_user_preferences(location_choice, difficulty_choice,     pet_choice, water_choice)
+    all.where(location: location_choice, difficulty: difficulty_choice, pets_allowed: pet_choice, has_water: water_choice)
+end
 ```
 
 ``` ruby
