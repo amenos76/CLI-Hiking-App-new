@@ -2,6 +2,12 @@ class Trail < ActiveRecord::Base
     has_many :favorites
     has_many :users, through: :meals
 
+    attr_reader :name 
+
+    def initialize
+        @name = name
+    end
+
 
     # array of all trail names
     def self.all_trail_names
@@ -30,6 +36,12 @@ class Trail < ActiveRecord::Base
     def self.trails_less_than_input_time(input_time)
         all.where('length_time <= ?', input_time) 
     end
+
+    # def self.trail_name_and_time(trail_object)
+    #     trail_object.each do |trail|
+    #         "Name: #{trail.name}, Length: #{trail.length_time}"
+    #     end
+    # end
 
     def self.get_trail_info trail_name
         all.find do |trail|

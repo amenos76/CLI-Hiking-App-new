@@ -2,20 +2,6 @@ class Favorite < ActiveRecord::Base
     belongs_to :user
     belongs_to :trail
 
-    # attr_accessor = :trail, :rating
-    # attr_reader = :user
-    # @@all = []
-
-    # def initialize(user, trail, rating)
-    #     @user = user
-    #     @trail = trail
-    #     @rating = rating
-    #     @@all << self
-    # end
-
-    # def self.all
-    #     @@all
-    # end
 
     def self.create_new_favorite(trail_id, user_id)
         returned_favorite = Favorite.find_by(trail_id: trail_id, user_id: user_id)
@@ -40,9 +26,9 @@ class Favorite < ActiveRecord::Base
 
 
     # gets user favorite trails based off username
-    def self.get_user_favorites(username)
+    def self.get_user_favorites(user_name)
         trail_names = []
-        id = User.get_user_id(username)
+        id = User.get_user_id(user_name)
         favorites = Favorite.where(user_id: id)
         favorites.each do |favorite_trail|
             puts favorite_trail.trail.name
@@ -50,6 +36,18 @@ class Favorite < ActiveRecord::Base
         end
         sleep(1)
         trail_names
+    end
+
+    # removes trail from favorites
+    def self.delete_user_favorite(user_name)
+        prompt = TTY::Prompt.new
+        user_favorites = get_user_favorites(user_name)
+        user_id = User.get_user_id(user_name)
+        system "clear"
+        user_trail_selection = prompt.select("Which trail would you like to remove?", user_favorites)
+        # binding.pry
+        trail_id = Trail.find_by(name: user_trail_selection).id
+        Favorite.find_by(trail_id: trail_id, user_id: user_id).destroy
     end
 
 

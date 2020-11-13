@@ -113,7 +113,7 @@ class Cli
     def main_menu
         system "clear"
         banner
-        menu_options = ["Find hikes based on how long I have (time)", "Select trail by name", "Choose a random trail for me", "Hike compatibility quiz", "See your saved hikes", "Exit Program"]
+        menu_options = ["Find hikes based on how long I have (time)", "Select trail by name", "Choose a random trail for me", "Find your perfect hike", "See your saved hikes", "Exit Program"]
         menu_selection = prompt.select("Please choose an option:", menu_options)   
 
         # loop do
@@ -129,22 +129,24 @@ class Cli
                 name_choice = prompt.select("Please select a trail:", trail_names_array)
                 trail_info = Trail.find_by_name(name_choice)
                 puts name_choice
-                save_trail_response = prompt.yes?("Would you like to save this trail to your favorites?")
-                    if (save_trail_response)
-                        save_to_favorites(name_choice)
-                    else
-                        main_menu_return
-                    end
+                more_info(name_choice)
+                # save_trail_response = prompt.yes?("Would you like to save this trail to your favorites?")
+                #     if (save_trail_response)
+                #         save_to_favorites(name_choice)
+                #     else
+                #         main_menu_return
+                #     end
             when "Choose a random trail for me"
                 random_trail_name = Trail.all_trail_names.sample
                 sleep(1)
                 puts "Here's a random trail selection: " + random_trail_name
                 sleep(1)
                 more_info(random_trail_name)
-            when "Hike compatibility quiz"
+            when "Find your perfect hike"
                 system "clear"
+                banner
                 puts "Let's find the perfect hike for you!"
-                sleep(1)
+                sleep(2)
                 ask_difficulty
                 ask_location
                 ask_dog
@@ -155,16 +157,52 @@ class Cli
                 perfect_trail
                 main_menu_return
             when "See your saved hikes"
-                # binding.pry
-                favorite_trail_names = Favorite.get_user_favorites(@@user_name_selection)
                 sleep(1)
                 system "clear"
                 banner
-                trail_choice = prompt.select("Choose a trail to view more info", favorite_trail_names)
-                ap Trail.find_by_name(trail_choice)
-                sleep(1)
-                prompt.select("Return to main menu", %w(Main\ Menu))
-                main_menu_return
+                favorite_trail_names = Favorite.get_user_favorites(@@user_name_selection)
+                # puts favorite_trail_names
+                menu_option = prompt.select("These are your saved trails!", ["See more info", "Remove a trail", "Back to Main Menu"])
+                # favorite_trail_names = Favorite.get_user_favorites(@@user_name_selection)
+                puts favorite_trail_names
+                if menu_option == "Remove a trail" && !favorite_trail_names.empty?
+                    system "clear"
+                    banner
+                    Favorite.delete_user_favorite(@@user_name_selection)
+                    puts "Trail removed from your Favorites list"
+                    sleep(2)
+                    main_menu_return
+                elsif menu_option == "Remove a trail" && !favorite_trail_names.empty?
+                    system "clear"
+                    banner
+                    puts "You have no saved trails yet."
+                    sleep(1)
+                    system "clear"
+                    banner
+                    main_menu_return
+                    # menu_option = prompt.select("Please choose an option:", menu_options)
+
+                elsif menu_option == "See more info"
+                    system "clear"
+                    banner
+                    trail_choice = prompt.select("Choose a trail to view more info", favorite_trail_names)
+                    ap Trail.find_by_name(trail_choice)
+                    sleep(1)
+                    prompt.select("Return to main menu?", %w(Main\ Menu))
+                    main_menu_return
+
+                else
+                    system "clear"
+                    banner
+                    main_menu_return
+                    # menu_option = prompt.select("Please choose an option:", menu_options)
+                end
+
+                # trail_choice = prompt.select("Choose a trail to view more info", favorite_trail_names)
+                # ap Trail.find_by_name(trail_choice)
+                # sleep(1)
+                # prompt.select("Return to main menu", %w(Main\ Menu))
+                # main_menu_return
             when "Exit Program"
                 puts "Happy trails!"
                 sleep(3)
@@ -192,6 +230,7 @@ class Cli
     #asks user preferred trail difficulty level
     def ask_difficulty
         system "clear"
+        banner
         @difficulty_choice = prompt.select("Choose your desired hike difficulty", %w(Easy Medium Hard))
         matching_trails = Trail.where(difficulty: @difficulty_choice)
         puts "You chose #{@difficulty_choice}, saving to your preferences.."
@@ -204,6 +243,7 @@ class Cli
     #asks user preferred hike location
     def ask_location
         system "clear"
+        banner
         choices = Trail.all_trail_locations
         @location_choice = prompt.select("Select location(s)?", choices)
         puts "You selected #{@location_choice}, saving to your preferences.."
@@ -213,15 +253,18 @@ class Cli
     #asks user if they'd like to bring a dog
     def ask_dog
         system "clear"
+        banner
         @dog_choice = prompt.yes?("Any doggos that you'd like to bring along?")
         if (@dog_choice)
             puts "🐶 *tail wagging intensifies* 🐶"
             sleep(1)
             puts "You chose yes, saving to your preferences.."
+            sleep(1)
         else
             puts "Maybe next time!"
             sleep(1)
             puts "You chose no, saving to your preferences.."
+            sleep(1)
         end
         sleep(1)
     end
@@ -229,27 +272,36 @@ class Cli
     #asks user if they'd like a trail with water
     def ask_water
         system "clear"
+        banner
         @water_choice = prompt.yes?("How about some lovely water features?")
         if (@water_choice)
             puts "🌊 That's some high quality H20 🌊"
+            sleep(1)
+            puts "You chose yes, saving to your preferences.."
         else
-            puts "No water today"
+            puts "Pshhh who needs water anyways?!"
+            sleep(1)
+            puts "You chose no, saving to your preferences.."
         end
-        sleep(1)
+        sleep(2)
     end
 
     # finds trail object
     def perfect_trail
+        system "clear"
+        banner
         perfect_trail = Trail.filter_by_user_preferences(@location_choice, @difficulty_choice, @dog_choice, @water_choice)
+        trail_name = perfect_trail.map{|h| h['name']}
         if perfect_trail == []
             puts "Couldn't find a matching trail, you're a picky one!"
             sleep(1)
         else
+        puts "Your perfect hike is: #{trail_name}!"
         ap perfect_trail
         answer = prompt.yes?("Would you like to save this hike to your favorites?")
+        
                     if answer
-                        puts "Saving to your favorites.."
-                        sleep(1)
+                        save_to_favorites(trail_name)
                     else
                         puts "Let's find something else!"
                         sleep (1)
@@ -298,7 +350,6 @@ class Cli
         user_id = (User.get_user_object(@@user_name_selection)).id
         Favorite.create_new_favorite(trail_id, user_id)
         banner
-        sleep(1)
         main_menu_return
     end
     
