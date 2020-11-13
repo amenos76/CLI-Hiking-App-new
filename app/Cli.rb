@@ -157,8 +157,8 @@ class Cli
                 main_menu_return
             when "See your saved hikes"
                 # binding.pry
-                favorite_trail_names = Favorite.get_user_favorites(@@user_name_selection)
                 sleep(1)
+                favorite_trail_names = Favorite.get_user_favorites(@@user_name_selection)
                 system "clear"
                 banner
                 trail_choice = prompt.select("Choose a trail to view more info", favorite_trail_names)
@@ -166,7 +166,7 @@ class Cli
                 sleep(1)
                 remove_trail_answer = prompt.select("Make a selection", ["Remove trail from favorites","Return to Main Menu"])
                 if remove_trail_answer = "Remove trail from favorites"
-                    Favorite.remove_user_favorite(trail_choice)
+                    Favorite.remove_user_favorite(@@user_name_selection, trail_choice)
                     puts "Trail was removed from favorites."
                     sleep(1)
                 else

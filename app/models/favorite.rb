@@ -52,6 +52,17 @@ class Favorite < ActiveRecord::Base
         trail_names
     end
 
+    def self.remove_user_favorite(username, trail_name)
+        prompt = TTY::Prompt.new
+        user_favorites = get_user_favorites(username)
+        user_id = User.get_user_id(username)
+        system "clear"
+        # user_taco_selection = prompt.select("Which taco would you like to remove?", user_favorites)
+        # binding.pry
+        trail_id = Trail.find_by(name: trail_name).id
+        Favorite.find_by(trail_id: trail_id, user_id: user_id).destroy
+    end
+
 
 
 end
