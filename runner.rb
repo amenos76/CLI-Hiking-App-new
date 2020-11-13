@@ -4,7 +4,7 @@ system "clear"
 
 app = Cli.new
 
-binding.pry
+# binding.pry
 
 app.banner
 app.start
