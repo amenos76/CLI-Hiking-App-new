@@ -143,6 +143,7 @@ class Cli
                 more_info(random_trail_name)
             when "Hike compatibility quiz"
                 system "clear"
+                banner
                 puts "Let's find the perfect hike for you!"
                 sleep(1)
                 ask_difficulty
@@ -192,6 +193,7 @@ class Cli
     #asks user preferred trail difficulty level
     def ask_difficulty
         system "clear"
+        banner
         @difficulty_choice = prompt.select("Choose your desired hike difficulty", %w(Easy Medium Hard))
         matching_trails = Trail.where(difficulty: @difficulty_choice)
         puts "You chose #{@difficulty_choice}, saving to your preferences.."
@@ -204,6 +206,7 @@ class Cli
     #asks user preferred hike location
     def ask_location
         system "clear"
+        banner
         choices = Trail.all_trail_locations
         @location_choice = prompt.select("Select location(s)?", choices)
         puts "You selected #{@location_choice}, saving to your preferences.."
@@ -213,6 +216,7 @@ class Cli
     #asks user if they'd like to bring a dog
     def ask_dog
         system "clear"
+        banner
         @dog_choice = prompt.yes?("Any doggos that you'd like to bring along?")
         if (@dog_choice)
             puts "🐶 *tail wagging intensifies* 🐶"
@@ -229,11 +233,13 @@ class Cli
     #asks user if they'd like a trail with water
     def ask_water
         system "clear"
+        banner
         @water_choice = prompt.yes?("How about some lovely water features?")
         if (@water_choice)
             puts "🌊 That's some high quality H20 🌊"
         else
             puts "No water today"
+            puts "You chose no, saving to your preferences.."
         end
         sleep(1)
     end
@@ -242,8 +248,8 @@ class Cli
     def perfect_trail
         perfect_trail = Trail.filter_by_user_preferences(@location_choice, @difficulty_choice, @dog_choice, @water_choice)
         if perfect_trail == []
-            puts "Couldn't find a matching trail, you're a picky one!"
-            sleep(1)
+            puts "Couldn't find a matching trail but keep exploring!"
+            sleep(2)
         else
         ap perfect_trail
         answer = prompt.yes?("Would you like to save this hike to your favorites?")
@@ -293,13 +299,13 @@ class Cli
     end
 
     #saves trail name to favorites
-    def save_to_favorites(trail_name)
-        trail_id = (Trail.find_by_name(trail_name)).id
-        user_id = (User.get_user_object(@@user_name_selection)).id
-        Favorite.create_new_favorite(trail_id, user_id)
-        banner
-        sleep(1)
-        main_menu_return
-    end
+    # def save_to_favorites(trail_name)
+    #     trail_id = (Trail.find_by_name(trail_name)).id
+    #     user_id = (User.get_user_object(@@user_name_selection)).id
+    #     Favorite.create_new_favorite(trail_id, user_id)
+    #     banner
+    #     sleep(1)
+    #     main_menu_return
+    # end
     
 end
