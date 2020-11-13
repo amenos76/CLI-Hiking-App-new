@@ -46,7 +46,9 @@ ruby runner.rb
 * Browse hikes based on length of time.
 * Have the app return a random hike for you.
      
+
      ![](Media/randomhike.gif)
+
 
 * See the listed hike details for each.
 * Save your favorite hikes for the future, and remove any you wish to no    
@@ -56,7 +58,9 @@ ruby runner.rb
 
 * Looking for the best hike for you? Use the Find your perfect hike feature! 
       
+
     ![](Media/perfecthike.gif)
+
 
 ## Code Examples
 ``` ruby
