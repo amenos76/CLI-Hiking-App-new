@@ -164,7 +164,14 @@ class Cli
                 trail_choice = prompt.select("Choose a trail to view more info", favorite_trail_names)
                 ap Trail.find_by_name(trail_choice)
                 sleep(1)
-                prompt.select("Return to main menu", %w(Main\ Menu))
+                remove_trail_answer = prompt.select("Make a selection", ["Remove trail from favorites","Return to Main Menu"])
+                if remove_trail_answer = "Remove trail from favorites"
+                    Favorite.remove_user_favorite(trail_choice)
+                    puts "Trail was removed from favorites."
+                    sleep(1)
+                else
+                main_menu_return
+                end
                 main_menu_return
             when "Exit Program"
                 puts "Happy trails!"
@@ -247,6 +254,7 @@ class Cli
     # finds trail object
     def perfect_trail
         perfect_trail = Trail.filter_by_user_preferences(@location_choice, @difficulty_choice, @dog_choice, @water_choice)
+        trail_name = perfect_trail.map
         if perfect_trail == []
             puts "Couldn't find a matching trail but keep exploring!"
             sleep(2)
