@@ -1,71 +1,109 @@
-# Mod 1 ActiveRecord Starter Repo
-
-In `config/database.yml`, you can change the name of the database from `db/cats.sqlite3` to whatever reflects your project. For example: `db/notes.sqlite3`. Doesn't really matter what you call the db. 
+# Let's Hike App!
 
 
+## Table of contents
+* [General info](#general-info)
+* [Intro Video](#intro-video)
+* [Technologies](#technologies)
+* [Setup](#setup)
+* [Features](#features)
+* [Status](#status)
+* [Contact](#contact)
+* [License](#license)
 
-## ActiveRecord Methods
-These common ActiveRecord methods will help you interact with your database. Please refer to the ActiveRecord
-docs for what they do and how to use them. (If the docs talk about Rails, that is ok! ActiveRecord works very
- similar with or without Rails.)
+
+## General info
+Let's Hike is a CLI application that allows users to create a login and search a database full of fun hikes for every level of Hiker! Let's Hike gives you several ways to find the right hike. You can search specifically by the amount of time you're looking to hike, 
+or simply allow the app to pick a random hike for you. If you are looking for the best hike that fits your needs, try out our Find your perfect hike feature! All of the hikes can be saved in your 'favorites' to easily reference in the future.
+
+
+## Intro Video
+
+video link here. 
+
+## Technologies
+* Ruby - version 2.6.1
+* ActiveRecord - version 6.0
+* Sinatra - version 2.0
+* Sinatra- ActiveRecord - version 2.0
+* SQLite3 - version 1.4
+* TTY prompt 0.22.0
+* TTY box 0.6.0
+* Awesome Print 1.8.0
+
+
+
+## Setup
+To run the app, install it locally by cloning the GitHub repository, and in your Terminal type:
+```ruby
+ruby runner.rb
+``` 
+
+## Features
+* Browse hikes based on length of time.
+* Have the app return a random hike for you.
+     
+     -random hike feature gif here-
+
+* See the listed hike details for each.
+* Save your favorite hikes for the future, and remove any you wish to no    
+  longer save.
+    
+    -favorites feature gif here-
+
+* Looking for the best hike for you? Use the Find your perfect hike feature! 
+      
+    -quiz gif here-
+
+
+## Code Examples
+``` ruby
+def display_each_trail_name
+    puts 'Here is our list of Colorado hiking trails:'
+    Trail.all_trail_names.each do |trail_name|
+    puts trail_name
+  end
+end 
 ```
-  .create (.new, .save)
-  .all
-  .count
-  .find
-  .find_by
-  .where
-```
 
-#### Notes
-
-*Remember*, any model that will have a corresponding table in the database needs to inherit from `ActiveRecord::Base`
-ex:
-```
-class Cat < ActiveRecord::Base
-  # customer methods defined here
+``` ruby
+def ask_difficulty
+    system "clear"
+    @difficulty_choice = prompt.select("Choose your desired hike difficulty", %w(Easy Medium Hard))
+    matching_trails = Trail.where(difficulty: @difficulty_choice)
+    puts "You chose #{@difficulty_choice}, saving to your preferences.."
+    sleep(1)
+  end 
 end
 ```
 
-- To view database, you can run `sqlite3 db/cats.db`, then can run `.schema` or `.tables` and can run any SQL commands. (Don't need to do this anymore though! ActiveRecord gives us a schema file!)
+
+## Status
+Project is finished with option to expand features and further refactor code.
 
 
-### Steps to setup Ruby app with activerecord
-(New for ActiveRecord 6.0)
+## Contact
+Created by [Augie Menos](https://www.linkedin.com/in/augie-menos-9b8329b1/) and [Kevin Johnson](https://www.linkedin.com/in/kevin-johnson805/)
 
 
-## The following steps are already done for you in this boiler plate repo. 
-## The steps below are provided to you as a reference only. 
-## You're not expected to memorize this (please don't).
+## License
 
+Copyright (c) [2020] [Augie Menos and Kevin Johnson]
 
-1. In root of project, run `bundle init`
-1. Add gems: 
-  `bundle add activerecord pry sinatra, sinatra-activerecord rake sqlite3 require_all`
-  run `bundle install`
-1. mkdir config and lib 
-1. mkdir lib/models
-1. touch config/environment.rb config/database.yml
-1. Create your model files and models (make sure to have your models inherit from ActiveRecord::Base)
-1. In config/environment.rb:
-```
-  require 'bundler/setup'
-  Bundler.require
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-  require_all 'lib'
-```
-1. In config/database.yml:
-  ```
-  development:
-    adapter: sqlite3
-    database: db/cats.sqlite3
-  ```
-1. Touch Rakefile - require ‘config/environment.rb’ and require_relative ‘sinatra/activerecord/rake’ 
-1. Run rake -T to make sure we have access to raketasks
-1. Run `rake db:create_migration NAME=create_cats_table` (will create the db folder if it doesn’t already exist) and will add the migration file to db/migration
-1. Write migration file, then run `rake db:migrate`
-1. Then can see schema in file structure, can also drop into sqlite3 cats.db to see the tables and schema, but don’t really need to do that anymore. *Review rollback here*
-1. Create seeds in db/seeds.rb and run `rake db:seed`
-1. Now can put a pry in environment.rb to run <ModelName>.all and see your seeds.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Make sure your models inherit from `ActiveRecord::Base`
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
